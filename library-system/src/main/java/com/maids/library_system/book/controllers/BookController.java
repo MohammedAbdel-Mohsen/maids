@@ -45,7 +45,7 @@ public class BookController {
             @ApiResponse(responseCode = "400", description = "Bad Request"),
             @ApiResponse(responseCode = "404", description = "Book not found")
     })
-    public ResponseEntity<BookResModel> updateBook(@PathVariable("id") int bookId,
+    public ResponseEntity<BookResModel> updateBook(@PathVariable("id") long bookId,
                                                    @RequestBody @Valid BookReqModel bookReqModel) {
         return new ResponseEntity<>(bookService.updateBook(bookId, bookReqModel), HttpStatus.OK);
     }
@@ -56,7 +56,7 @@ public class BookController {
             @ApiResponse(responseCode = "200", description = "Book retrieved successfully"),
             @ApiResponse(responseCode = "404", description = "Book not found")
     })
-    public ResponseEntity<BookResModel> getBookById(@PathVariable("id") int bookId) {
+    public ResponseEntity<BookResModel> getBookById(@PathVariable("id") long bookId) {
         return new ResponseEntity<>(bookService.getBookById(bookId), HttpStatus.OK);
     }
 
@@ -76,7 +76,7 @@ public class BookController {
             @ApiResponse(responseCode = "200", description = "Book deleted successfully"),
             @ApiResponse(responseCode = "404", description = "Book not found")
     })
-    public ResponseEntity<Void> deleteBookById(@PathVariable("id") int bookId) {
+    public ResponseEntity<Void> deleteBookById(@PathVariable("id") long bookId) {
         bookService.deleteBookById(bookId);
         return new ResponseEntity<>(HttpStatus.OK);
     }

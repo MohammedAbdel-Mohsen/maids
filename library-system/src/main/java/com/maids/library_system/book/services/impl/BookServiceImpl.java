@@ -7,6 +7,9 @@ import com.maids.library_system.book.repositories.BookRepository;
 import com.maids.library_system.book.services.BookService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -26,20 +29,28 @@ public class BookServiceImpl implements BookService {
         Book book = new Book();
         mapBookReqModelToBook(book, bookReqModel);
         book = bookRepository.save(book);
-        return bookMapper.map(book, BookResModel.class);
+        return BookResModel.builder().id(book.getId())
+                .title(book.getTitle())
+                .author(book.getAuthor())
+                .isbn(book.getIsbn())
+                .publicationYear(book.getPublicationYear())
+                .build();
+
     }
 
     @Override
-    public BookResModel updateBook(int bookId, BookReqModel bookReqModel) {
-        Book updatedBook = bookRepository.findById(bookId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found"));
+    @CachePut(value = "books", key = "#id")
+    public BookResModel updateBook(long id, BookReqModel bookReqModel) {
+        Book updatedBook = bookRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found"));
         mapBookReqModelToBook(updatedBook, bookReqModel);
         updatedBook = bookRepository.save(updatedBook);
         return bookMapper.map(updatedBook, BookResModel.class);
     }
 
     @Override
-    public BookResModel getBookById(int bookId) {
-        Book updatedBook = bookRepository.findById(bookId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found"));
+    @Cacheable(value = "books", key = "#id")
+    public BookResModel getBookById(long id) {
+        Book updatedBook = bookRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found"));
         return bookMapper.map(updatedBook, BookResModel.class);
     }
 
@@ -49,8 +60,9 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void deleteBookById(int bookId) {
-        bookRepository.deleteById(bookId);
+    @CacheEvict(value = "books", key = "#id")
+    public void deleteBookById(long id) {
+        bookRepository.deleteById(id);
     }
 
     private void mapBookReqModelToBook(Book book, BookReqModel bookReqModel) {

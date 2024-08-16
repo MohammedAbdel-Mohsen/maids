@@ -6,14 +6,14 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.*;
 
-@Data
-public class PatronReqModel implements Serializable {/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6937678718635190034L;
-	
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+public class PatronReqModel implements Serializable {
 	@NotNull
 	@Email
 	@Size(max = 50)

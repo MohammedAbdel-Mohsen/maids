@@ -15,17 +15,12 @@ import lombok.Setter;
 @Entity
 @Setter
 @Getter
-@Table(name ="Book")
+@Table(name ="Books")
 public class Book implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8822166480694613992L;
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Long id;
 	
 	@Column(length = 250,nullable=false)
 	private String author;

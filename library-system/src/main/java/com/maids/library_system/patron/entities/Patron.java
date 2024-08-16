@@ -16,17 +16,12 @@ import lombok.Setter;
 @Entity
 @Setter
 @Getter
-@Table(name ="Patron")
+@Table(name ="Patrons")
 public class Patron implements Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2140396659527419096L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Long id;
 	
 	@Column(nullable=false)
 	private String name;

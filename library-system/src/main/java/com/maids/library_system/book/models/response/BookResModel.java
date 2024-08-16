@@ -2,14 +2,18 @@ package com.maids.library_system.book.models.response;
 
 import java.io.Serializable;
 
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class BookResModel implements Serializable {
 
-	private int id;
-	private String author;
-	private String title;
-	private String isbn;
-	private int publicationYear;
+    private Long id;
+    private String author;
+    private String title;
+    private String isbn;
+    private int publicationYear;
 }

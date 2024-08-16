@@ -8,11 +8,11 @@ import java.util.List;
 public interface BookService {
     BookResModel createBook(BookReqModel bookReqModel);
 
-    BookResModel updateBook(int bookId, BookReqModel bookReqModel);
+    BookResModel updateBook(long bookId, BookReqModel bookReqModel);
 
-    BookResModel getBookById(int bookId);
+    BookResModel getBookById(long bookId);
 
     List<BookResModel> getAllBooks();
 
-    void deleteBookById(int bookId);
+    void deleteBookById(long bookId);
 }

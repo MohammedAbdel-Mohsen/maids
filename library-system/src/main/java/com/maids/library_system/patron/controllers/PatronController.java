@@ -2,6 +2,7 @@ package com.maids.library_system.patron.controllers;
 
 import java.util.List;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,27 +25,27 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/patrons")
 @Validated
+@AllArgsConstructor
 public class PatronController {
 
-	@Autowired
 	PatronService patronService;
 
 	
 	@PostMapping
-	public ResponseEntity<Integer> createPatron(
+	public ResponseEntity<Long> createPatron(
 		    @RequestBody @Valid PatronReqModel patronReqModel) {
 		return new ResponseEntity<>(patronService.createPatron(patronReqModel), HttpStatus.OK);
 	}
 	
 	
 	@PutMapping(path ="/{id}")
-	public ResponseEntity<Integer> updatePatron(@PathVariable("id") int patronId,
+	public ResponseEntity<Long> updatePatron(@PathVariable("id") long patronId,
 		     @RequestBody @Valid PatronReqModel patronReqModel) {
 		return new ResponseEntity<>(patronService.updatePatron(patronId,patronReqModel), HttpStatus.OK);
 	}
 	
 	@GetMapping(path ="/{id}")
-	public ResponseEntity<PatronResModel> getPatronById(@PathVariable("id") int patronId) {
+	public ResponseEntity<PatronResModel> getPatronById(@PathVariable("id") long patronId) {
 		return new ResponseEntity<>(patronService.getPatronById(patronId), HttpStatus.OK);
 	}
 	
@@ -54,7 +55,7 @@ public class PatronController {
 	}
 	
 	@DeleteMapping(path="/{id}")
-	public ResponseEntity<Void> deletePatronById(@PathVariable("id") int patronId){
+	public ResponseEntity<Void> deletePatronById(@PathVariable("id") long patronId){
 		patronService.deletePatronById(patronId);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}

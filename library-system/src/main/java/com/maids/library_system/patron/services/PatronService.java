@@ -6,9 +6,9 @@ import com.maids.library_system.patron.models.request.PatronReqModel;
 import com.maids.library_system.patron.models.response.PatronResModel;
 
 public interface PatronService {
-	int createPatron(PatronReqModel patronReqModel);
-	int updatePatron(int patronId,PatronReqModel patronReqModel);
-	PatronResModel getPatronById(int patronId);
+	long createPatron(PatronReqModel patronReqModel);
+	long updatePatron(long patronId,PatronReqModel patronReqModel);
+	PatronResModel getPatronById(long patronId);
 	List<PatronResModel> getAllPatrons();
-	void deletePatronById(int patronId);
+	void deletePatronById(long patronId);
 }

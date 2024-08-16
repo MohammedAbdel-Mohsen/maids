@@ -19,7 +19,7 @@ public class PatronServiceImpl implements PatronService {
     private final PatronRepository patronRepository;
     private final ModelMapper patronMapper;
 
-    public int createPatron(PatronReqModel patronReqModel) {
+    public long createPatron(PatronReqModel patronReqModel) {
         Patron patron = new Patron();
         mapPatronReqModelToPatron(patron, patronReqModel);
         patronRepository.save(patron);
@@ -27,7 +27,7 @@ public class PatronServiceImpl implements PatronService {
     }
 
     @Override
-    public int updatePatron(int patronId, PatronReqModel patronReqModel) {
+    public long updatePatron(long patronId, PatronReqModel patronReqModel) {
         Patron updatedPatron = patronRepository.findById(patronId).orElseThrow(() -> new RuntimeException("Patron not found"));
         mapPatronReqModelToPatron(updatedPatron, patronReqModel);
         patronRepository.save(updatedPatron);
@@ -36,7 +36,7 @@ public class PatronServiceImpl implements PatronService {
 
 
     @Override
-    public PatronResModel getPatronById(int patronId) {
+    public PatronResModel getPatronById(long patronId) {
         Patron patron = patronRepository.findById(patronId).orElseThrow(() -> new RuntimeException("Patron not found"));
         return patronMapper.map(patron, PatronResModel.class);
     }
@@ -47,7 +47,7 @@ public class PatronServiceImpl implements PatronService {
     }
 
     @Override
-    public void deletePatronById(int patronId) {
+    public void deletePatronById(long patronId) {
         patronRepository.deleteById(patronId);
     }
 

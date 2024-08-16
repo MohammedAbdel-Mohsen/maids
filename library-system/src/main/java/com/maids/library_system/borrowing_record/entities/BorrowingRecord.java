@@ -22,17 +22,12 @@ import lombok.Setter;
 @Entity
 @Setter
 @Getter
-@Table(name ="BorrowingRecord")
+@Table(name ="BorrowingRecords")
 public class BorrowingRecord implements Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1406720365866683295L;
 
 	   @Id
 	    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	    private int id;
+	    private Long id;
 
 	    @Column(nullable=false)
 	    private LocalDate borrowingDate;
