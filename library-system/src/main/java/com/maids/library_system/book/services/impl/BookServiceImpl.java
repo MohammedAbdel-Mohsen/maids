@@ -5,7 +5,8 @@ import com.maids.library_system.book.models.request.BookReqModel;
 import com.maids.library_system.book.models.response.BookResModel;
 import com.maids.library_system.book.repositories.BookRepository;
 import com.maids.library_system.book.services.BookService;
-import lombok.AllArgsConstructor;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -18,13 +19,14 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
     private final ModelMapper bookMapper;
 
     @Override
+    @Transactional
     public BookResModel createBook(BookReqModel bookReqModel) {
         Book book = new Book();
         mapBookReqModelToBook(book, bookReqModel);
@@ -40,6 +42,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @CachePut(value = "books", key = "#id")
+    @Transactional
     public BookResModel updateBook(long id, BookReqModel bookReqModel) {
         Book updatedBook = bookRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found"));
         mapBookReqModelToBook(updatedBook, bookReqModel);
@@ -61,6 +64,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @CacheEvict(value = "books", key = "#id")
+    @Transactional
     public void deleteBookById(long id) {
         bookRepository.deleteById(id);
     }

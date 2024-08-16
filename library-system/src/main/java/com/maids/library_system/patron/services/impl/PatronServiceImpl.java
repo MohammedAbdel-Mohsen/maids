@@ -5,7 +5,8 @@ import com.maids.library_system.patron.models.request.PatronReqModel;
 import com.maids.library_system.patron.models.response.PatronResModel;
 import com.maids.library_system.patron.repositories.PatronRepository;
 import com.maids.library_system.patron.services.PatronService;
-import lombok.AllArgsConstructor;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -13,12 +14,13 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class PatronServiceImpl implements PatronService {
 
     private final PatronRepository patronRepository;
     private final ModelMapper patronMapper;
 
+    @Transactional
     public long createPatron(PatronReqModel patronReqModel) {
         Patron patron = new Patron();
         mapPatronReqModelToPatron(patron, patronReqModel);
@@ -27,6 +29,7 @@ public class PatronServiceImpl implements PatronService {
     }
 
     @Override
+    @Transactional
     public long updatePatron(long patronId, PatronReqModel patronReqModel) {
         Patron updatedPatron = patronRepository.findById(patronId).orElseThrow(() -> new RuntimeException("Patron not found"));
         mapPatronReqModelToPatron(updatedPatron, patronReqModel);
@@ -47,6 +50,7 @@ public class PatronServiceImpl implements PatronService {
     }
 
     @Override
+    @Transactional
     public void deletePatronById(long patronId) {
         patronRepository.deleteById(patronId);
     }

@@ -4,10 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import com.maids.library_system.patron.entities.Patron;
 import com.maids.library_system.patron.models.request.PatronReqModel;
@@ -189,7 +186,8 @@ class PatronServiceImplTest {
         // Arrange
         Optional<Patron> emptyResult = Optional.empty();
         when(patronRepository.findById(Mockito.<Long>any())).thenReturn(emptyResult);
-        when(modelMapper.map(Mockito.<Object>any(), Mockito.<Class<Object>>any())).thenReturn("Map");
+
+        // Mock modelMapper to return the correct type
         PatronResModel buildResult = PatronResModel.builder()
                 .email("jane.doe@example.org")
                 .id(1)
@@ -200,7 +198,9 @@ class PatronServiceImplTest {
 
         // Act and Assert
         assertThrows(RuntimeException.class, () -> patronServiceImpl.getPatronById(1L));
-        verify(modelMapper).map(Mockito.<Object>any(), Mockito.<Class<Object>>any());
+
+        // Verify the interactions
+        verify(modelMapper, never()).map(Mockito.<Object>any(), Mockito.<Class<PatronResModel>>any()); // Mapping should never occur if Patron is not found.
         verify(patronRepository).findById(eq(1L));
     }
 

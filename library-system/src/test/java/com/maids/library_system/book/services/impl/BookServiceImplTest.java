@@ -5,10 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import com.maids.library_system.book.entities.Book;
 import com.maids.library_system.book.models.request.BookReqModel;
@@ -164,14 +161,22 @@ class BookServiceImplTest {
         // Arrange
         Optional<Book> emptyResult = Optional.empty();
         when(bookRepository.findById(Mockito.<Long>any())).thenReturn(emptyResult);
-        when(modelMapper.map(Mockito.<Object>any(), Mockito.<Class<Object>>any())).thenReturn("Map");
-        BookResModel buildResult = BookResModel.builder().author("JaneDoe").id(1L).publicationYear(1).title("Dr").build();
+
+        // Mock modelMapper to return the correct type
+        BookResModel buildResult = BookResModel.builder()
+                .author("JaneDoe")
+                .id(1L)
+                .publicationYear(1)
+                .title("Dr")
+                .build();
         when(modelMapper.map(Mockito.<Object>any(), Mockito.<Class<BookResModel>>any())).thenReturn(buildResult);
 
         // Act and Assert
         assertThrows(ResponseStatusException.class,
                 () -> bookServiceImpl.updateBook(1L, new BookReqModel("JaneDoe", "Dr", "Isbn", 1)));
-        verify(modelMapper).map(Mockito.<Object>any(), Mockito.<Class<Object>>any());
+
+        // Verify interactions
+        verify(modelMapper, never()).map(Mockito.<Object>any(), Mockito.<Class<BookResModel>>any()); // Since the book is not found, mapping should never occur.
         verify(bookRepository).findById(eq(1L));
     }
 
@@ -259,13 +264,21 @@ class BookServiceImplTest {
         // Arrange
         Optional<Book> emptyResult = Optional.empty();
         when(bookRepository.findById(Mockito.<Long>any())).thenReturn(emptyResult);
-        when(modelMapper.map(Mockito.<Object>any(), Mockito.<Class<Object>>any())).thenReturn("Map");
-        BookResModel buildResult = BookResModel.builder().author("JaneDoe").id(1L).publicationYear(1).title("Dr").build();
+
+        // Mock modelMapper to handle the correct return type for BookResModel
+        BookResModel buildResult = BookResModel.builder()
+                .author("JaneDoe")
+                .id(1L)
+                .publicationYear(1)
+                .title("Dr")
+                .build();
         when(modelMapper.map(Mockito.<Object>any(), Mockito.<Class<BookResModel>>any())).thenReturn(buildResult);
 
         // Act and Assert
         assertThrows(ResponseStatusException.class, () -> bookServiceImpl.getBookById(1L));
-        verify(modelMapper).map(Mockito.<Object>any(), Mockito.<Class<Object>>any());
+
+        // Verify the interactions
+        verify(modelMapper, never()).map(Mockito.<Object>any(), Mockito.<Class<BookResModel>>any()); // This mapping should never be called since the book is not found.
         verify(bookRepository).findById(eq(1L));
     }
 

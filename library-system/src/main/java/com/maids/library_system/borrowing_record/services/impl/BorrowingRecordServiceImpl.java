@@ -7,14 +7,14 @@ import com.maids.library_system.borrowing_record.repositories.BorrowingRecordRep
 import com.maids.library_system.borrowing_record.services.BorrowingRecordService;
 import com.maids.library_system.patron.entities.Patron;
 import com.maids.library_system.patron.repositories.PatronRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class BorrowingRecordServiceImpl implements BorrowingRecordService {
     private final PatronRepository patronRepository;
     private final BookRepository bookRepository;
@@ -22,6 +22,7 @@ public class BorrowingRecordServiceImpl implements BorrowingRecordService {
 
 
     @Override
+    @Transactional
     public Long borrowABook(long bookId, long patronId) {
         BorrowingRecord borrowingRecord = new BorrowingRecord();
         mapToBorrowingRecord(borrowingRecord, bookId, patronId);
